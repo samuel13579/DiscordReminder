@@ -2,35 +2,21 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const Enmap = require('enmap');
 const bot = new Discord.Client();
-require('dotenv-flow').config();
-
-const config = {
-  token : process.env.TOKEN,
-  owner: process.env.OWNER,
-  prefix: process.env.PREFIX
-};
-
-const prefix = config.prefix;
+const { token } = require('./config');
 
 bot.commands = new Enmap();
 
-bot.on('ready', () => {
-  console.log(`Logged in as ${bot.user.tag}!`);
-});
 
-bot.on('message', msg => {
 
-  if(msg.author.bot) return;
-  if(msg.content.indexOf(prefix) !== 0) return;
-
-  const args = msg.content.slice(prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLocaleLowerCase();
-
-  const cmd = bot.commands.get(command);
-  if(!cmd) return;
-
-  cmd.run(bot, msg, args);
-
+fs.readdir('./events/', (err, files) => {
+  if(err) return console.error;
+  files.forEach(file => {
+    if(!file.endsWith('.js')) return;
+    const evt = require(`./events/${file}`);
+    let evtName = file.split(`.`)[0];
+    console.log(`Loaded '${evtName}'.`);
+    bot.on(evtName, evt.bind(null, bot));
+  });
 });
 
 fs.readdir('./commands/', async(err, files) => {
@@ -44,4 +30,4 @@ fs.readdir('./commands/', async(err, files) => {
   });
 });
 
-bot.login(config.token);
+bot.login(token);
