@@ -31,30 +31,6 @@ bot.on('message', msg => {
 
   cmd.run(bot, msg, args);
 
-  // switch (command) {
-  //   case 'ping': {
-  //     msg.reply('Pong!');
-  //     break;
-  //   }
-
-  //   case 'myname': {
-  //     const name = msg.member.displayName;
-  //     msg.delete();
-  //     msg.channel.send(`Your name is ${name}`);
-  //     break;
-  //   }
-
-  //   case 'say': {
-  //     const response = args.join(` `);
-  //     msg.channel.send(response);
-  //     break;
-  //   }
-
-  //   default:
-  //   msg.channel.send('This command is unknown');
-  //   break;
-  // }
-
 });
 
 fs.readdir('./commands/', async(err, files) => {
