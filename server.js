@@ -6,7 +6,7 @@ const { token } = require('./config');
 
 bot.commands = new Enmap();
 
-
+bot.mongoose = require('./utils/db');
 
 fs.readdir('./events/', (err, files) => {
   if(err) return console.error;
@@ -30,4 +30,5 @@ fs.readdir('./commands/', async(err, files) => {
   });
 });
 
+bot.mongoose.init();
 bot.login(token);
